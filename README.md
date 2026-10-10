@@ -1,5 +1,15 @@
 # ResumeIQ — AI Resume Parser & Screening
 
+<p align="center">
+  <a href="https://ai-resume-screening-clsgjgpcbapcdset6iqszi.streamlit.app/">
+    <strong>🚀 Launch Live Demo</strong>
+  </a>
+  &nbsp; | &nbsp;
+  <a href="https://github.com/Naitik-gif05/ai-resume-screening">
+    <strong>GitHub Repository</strong>
+  </a>
+</p>
+
 ResumeIQ is an AI-assisted resume parsing and candidate screening application built with Python and Streamlit. It extracts information from PDF and DOCX resumes, compares candidate profiles with a job description using the Groq API, and presents match scores and explanations to support human review.
 
 > **ResumeIQ is a decision-support tool, not an automated hiring system. All candidate information and AI-generated evaluations should be reviewed by a human.**
@@ -40,7 +50,7 @@ ResumeIQ/
 │   └── test_ui_helpers.py
 ├── .streamlit/
 │   └── config.toml
-├── resumes/              # Do not commit private candidate resumes
+├── resumes/              # Local resume files; do not commit private resumes
 ├── pyproject.toml
 ├── uv.lock
 ├── .gitignore
