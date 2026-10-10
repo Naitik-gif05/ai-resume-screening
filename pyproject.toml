@@ -13,6 +13,7 @@ dependencies = [
     "pypdf>=6.19.0",
     "python-docx>=1.2.0",
     "python-dotenv>=1.2.4",
+    "streamlit>=1.65.0",
 ]
 
 [project.scripts]
@@ -21,3 +22,8 @@ day5-project = "day5_project:main"
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

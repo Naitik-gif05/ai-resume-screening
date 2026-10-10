@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#4f46e5"
+
+[server]
+# Matches the 5 MB per-resume limit enforced in ui_helpers.py (value is in MB).
+maxUploadSize = 5
