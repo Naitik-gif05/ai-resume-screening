@@ -16,14 +16,16 @@ dependencies = [
     "streamlit>=1.65.0",
 ]
 
-[project.scripts]
-day5-project = "day5_project:main"
+
 
 [build-system]
-requires = ["uv_build>=0.12.17,<0.13.0"]
-build-backend = "uv_build"
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
 ]
+
+[tool.setuptools]
+py-modules = ["app", "main", "ui_helpers"]
