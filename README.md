@@ -1,231 +1,154 @@
-# AI Resume Screening & Evaluation System
+# ResumeIQ — AI Resume Parser & Screening
 
-An AI-powered resume screening system that evaluates multiple resumes against a dynamically generated Job Description (JD).
+ResumeIQ is an AI-assisted resume parsing and candidate screening application built with Python and Streamlit. It extracts information from PDF and DOCX resumes, compares candidate profiles with a job description using the Groq API, and presents match scores and explanations to support human review.
 
-The project uses an LLM to extract structured information from both the job description and resumes, evaluate each candidate against the requirements, and rank candidates based on their overall match score.
+> **ResumeIQ is a decision-support tool, not an automated hiring system. All candidate information and AI-generated evaluations should be reviewed by a human.**
 
 ## Features
 
-- Generate a structured Job Description using an LLM
-- Extract text from PDF and DOCX resumes
-- Parse unstructured resumes into structured data
-- Extract candidate information, skills, experience, education, projects, and certifications
-- Compare candidates against job requirements
-- Generate an overall match percentage
-- Identify matching and missing skills
-- Check experience requirements
-- Rank candidates automatically
-- Display the top 2 and lowest 2 candidates
+- Upload multiple PDF and DOCX resumes.
+- Validate supported file formats and upload constraints.
+- Extract candidate details such as skills, experience, education, projects, and certifications when available.
+- Compare candidate profiles with a job description.
+- Generate AI-based match scores and explanations.
+- Rank candidates by match score.
+- Review candidate details and screening results.
+- Export screening results to CSV.
+- Clear session data.
+- Run automated tests for helper functionality.
 
-## Architecture
-
-```text
-Job Description
-       ↓
-      LLM
-       ↓
-Structured JobD
-       ↓
-PDF / DOCX Resumes
-       ↓
-Text Extraction
-       ↓
-Raw Resume Text
-       ↓
-      LLM
-       ↓
-Structured Resume
-       ↓
-JobD + Resume
-       ↓
-      LLM
-       ↓
-Match Result
-       ↓
-Candidate Ranking
-       ↓
-Top 2 + Lowest 2
-```
-
-## Tech Stack
+## Technology Stack
 
 - Python
-- Groq API
-- `openai/gpt-oss-120b`
-- Pydantic
-- pypdf
-- python-docx
-- python-dotenv
-- uv
-- JSON
+- Streamlit — web interface
+- Groq API — language-model processing
+- Pydantic — structured data validation
+- PyPDF — PDF text extraction
+- python-docx — DOCX text extraction
+- python-dotenv — environment-variable loading
+- uv — dependency management
+- pytest — automated testing
 
 ## Project Structure
 
 ```text
-day5_project/
-│
+ResumeIQ/
+├── app.py
 ├── main.py
+├── ui_helpers.py
+├── tests/
+│   └── test_ui_helpers.py
+├── .streamlit/
+│   └── config.toml
+├── resumes/              # Do not commit private candidate resumes
 ├── pyproject.toml
 ├── uv.lock
-├── README.md
 ├── .gitignore
-│
-└── resumes/
-    ├── Abhay Singh 1.pdf
-    ├── Ashish Raj 24PCS007 (1) - Ashish Raj.pdf
-    ├── Resume for Freshers - Priyanshu Singh.docx
-    └── anshit verma resume word - Anshit Verma.docx
+└── README.md
 ```
 
-## How It Works
+The `.env` file is used for local configuration and must not be committed to GitHub.
 
-### 1. Job Description Generation
+## Requirements
 
-The system processes the job requirements using the LLM and converts them into a structured `JobD` Pydantic model.
+- Python version compatible with `pyproject.toml`
+- `uv`
+- A Groq API key
 
-The structured job data contains:
+## Installation and Setup
 
-- Role
-- Required skills
-- Preferred skills
-- Minimum experience
-- Education requirements
-- Responsibilities
-
-### 2. Resume Text Extraction
-
-The system supports both PDF and DOCX resumes.
-
-- PDF → extracted using `pypdf`
-- DOCX → extracted using `python-docx`
-
-The extracted text is then passed to the LLM.
-
-### 3. Resume Parsing
-
-The LLM converts the raw resume text into a structured `Resume` model containing:
-
-- Name
-- Email
-- Phone
-- Total experience
-- Skills
-- Experiences
-- Education
-- Projects
-- Certifications
-
-### 4. Candidate Evaluation
-
-Each structured resume is compared with the structured Job Description.
-
-The LLM evaluates:
-
-- Matching skills
-- Missing important skills
-- Experience requirement
-- Overall candidate-job match
-- Final verdict
-
-The result is stored as a structured `MatchResult`.
-
-### 5. Candidate Ranking
-
-All candidates are collected and sorted according to their match score.
-
-The system then displays the top 2 and lowest 2 candidates.
-
-## Installation
-
-Clone the repository:
+### 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
-cd day5_project
+git clone https://github.com/Naitik-gif05/ai-resume-screening.git
+cd ai-resume-screening
 ```
 
-Install the project dependencies:
+### 2. Install dependencies
+
+Run this from the directory containing `pyproject.toml`:
 
 ```bash
 uv sync
 ```
 
-## Environment Variables
+### 3. Configure the API key
 
 Create a `.env` file in the project root:
 
 ```env
-GROQ_API_KEY=your_api_key_here
+GROQ_API_KEY=your_groq_api_key_here
 ```
 
-The API key is loaded using `python-dotenv`.
+Replace the placeholder with your own key. Never commit `.env` or expose the key in source code, screenshots, or public repositories.
 
-**Never commit your `.env` file or API keys to GitHub.**
+## Run the Application
 
-## Running the Project
-
-Run the application using:
+From the project root:
 
 ```bash
-uv run python main.py
+uv run streamlit run app.py
 ```
 
-The system will process the resumes present inside the `resumes/` directory and generate candidate scores and rankings.
+Open the local address printed in the terminal, usually `http://localhost:8501`.
 
-## Example Output
+## How to Use
 
-```text
-Processing: Abhay Singh 1.pdf
-Score: 60.0
+1. Open **Screen Resumes**.
+2. Enter a job description and any optional role details.
+3. Upload PDF or DOCX resumes.
+4. Review the uploaded files and screening settings.
+5. Start the analysis.
+6. Review candidate scores, rankings, extracted details, and explanations.
+7. Export results to CSV if needed.
+8. Clear session data when finished.
 
-Processing: Ashish Raj 24PCS007 (1) - Ashish Raj.pdf
-Score: 70.0
+## Run Tests
 
-Processing: anshit verma resume word - Anshit Verma.docx
-Score: 40.0
+Run the helper test suite:
 
-Processing: Resume for Freshers - Priyanshu Singh.docx
-Score: 30.0
-
-
-TOP 2 CANDIDATES
-
-Ashish Raj - 70.0%
-Abhay Pratap Singh - 60.0%
-
-
-LOWEST 2 CANDIDATES
-
-Anshit Verma - 40.0%
-Priyanshu Singh - 30.0%
+```bash
+uv run python -m pytest tests/test_ui_helpers.py -v
 ```
 
-> Match scores are generated using an LLM and may vary between runs.
+Run all discovered tests:
 
-## Key Concepts Learned
+```bash
+uv run python -m pytest -v
+```
 
-- LLM-based information extraction
-- Structured outputs
-- Pydantic models
-- JSON parsing
-- PDF and DOCX processing
-- Prompt engineering
-- Multi-document processing
-- LLM-based candidate evaluation
-- Candidate ranking
-- Environment variable management
-- Dependency management with uv
+## How It Works
 
-## Learning Context
+1. Text is extracted from uploaded PDF and DOCX files.
+2. The job description is processed into structured role information.
+3. Resume text is processed to extract candidate information.
+4. A language model compares each candidate profile with the job requirements and generates a match score and explanation.
+5. Results are displayed and ranked for human review.
 
-This project was built as part of the Padho with Pratyush AI Engineer learning track, focusing on practical applications of LLMs, structured outputs, and document processing.
+Match scores are AI-generated assessments. They are not probabilities of job performance or guarantees of candidate suitability.
+
+## Limitations
+
+- Model-generated information and scores may be incomplete or inaccurate.
+- Scanned or image-only PDFs may not provide extractable text if OCR is unavailable.
+- API rate limits and network issues may affect processing time.
+- Large batches may take considerable time because requests are processed with pauses.
+- The application has not been load-tested for enterprise-scale processing.
+- Some skill comparisons may rely on text matching and may not recognize synonyms.
+- The current implementation does not provide a validated, configurable weighted-scoring model.
+
+## Security, Privacy, and Responsible Use
+
+- Keep API keys, `.env`, private resumes, and candidate exports out of version control.
+- Resume content is sent to the configured Groq API for processing. Review the provider's current data-handling terms before using personal or confidential information.
+- Use sample data only when authorized.
+- Verify extracted information against the original resume.
+- Do not reject or select candidates solely on the basis of an AI-generated score. Human review is required.
 
 ## Future Improvements
 
-- Add a web interface
-- Add resume and job-description upload functionality
-- Add batch processing for larger resume datasets
-- Add deterministic scoring alongside LLM evaluation
-- Add evaluation metrics for screening accuracy
-- Add database storage for candidates
-- Add observability and evaluation pipelines
+Potential improvements include background processing for large batches, persistent storage, stronger retry and rate-limit handling, evidence-based explanations, OCR support, and additional export formats.
+
+## License
+
+No license is specified in this repository yet. Add a `LICENSE` file if you intend to distribute the project under an open-source license.
